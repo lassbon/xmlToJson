@@ -1,0 +1,62 @@
+<?php
+<?php
+
+$result='xml version="1.0" encoding="utf-8"
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <soap:Body>
+        <GetCommunitiesResponse xmlns="url">
+            <GetCommunitiesResult xmlns:a="http://schemas.datacontract.org/2004/07/CIBUploadService.Models" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+                <Communities>
+                    <CommunityID>1</CommunityID>
+                    <CommunityName> Not Specified</CommunityName>
+                </Communities>
+                <Communities>
+                    <CommunityID>276</CommunityID>
+                    <CommunityName>Bella Toscana</CommunityName>
+                </Communities>
+                <Communities>
+                    <CommunityID>31</CommunityID>
+                    <CommunityName>Crescent Lakes</CommunityName>
+                </Communities>
+                <Communities>
+                    <CommunityID>62</CommunityID>
+                    <CommunityName>Hillcrest Estate</CommunityName>
+                </Communities>
+                <Communities>
+                    <CommunityID>750</CommunityID>
+                    <CommunityName>Sunny Beach</CommunityName>
+                </Communities>
+                <Communities>
+                    <CommunityID>124</CommunityID>
+                    <CommunityName>Terra Verde Resort</CommunityName>
+                </Communities>
+                <Communities>
+                    <CommunityID>744</CommunityID>
+                    <CommunityName>The Dales at West Haven</CommunityName>
+                </Communities>
+                <Communities>
+                    <CommunityID>158</CommunityID>
+                    <CommunityName>Westridge</CommunityName>
+                </Communities>
+            </GetCommunitiesResult>
+        </GetCommunitiesResponse>
+    </soap:Body>
+</soap:Envelope>';
+
+
+// a bit of a hack, but let's see...
+list($trash,$result)=explode('<soap:Body>',$result);
+list($result,$trash)=explode('</soap:Body>',$result);
+unset($trash);
+$result=str_replace('xmlns="url"','',$result);
+
+var_dump(htmlspecialchars($result));//die();
+$simple_result=simplexml_load_string($result);
+$json_result=json_encode($simple_result);
+
+//var_export($simple_result);
+echo $json_result;
+
+$json_result['GetCommunitiesResponse '];
+
+?>
