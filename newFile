@@ -1,0 +1,66 @@
+<?php
+
+
+
+
+<?php
+
+$result='xml version="1.0" encoding="utf-8"
+<soap:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+   <s:Body>
+      <SendRequestResponse xmlns="http://com.zenithbank.com/custom/cibupload">
+         <SendRequestResult xmlns:a="http://schemas.datacontract.org/2004/07/CIBUploadService.Models" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <a:Description>Failed</a:Description>
+            <a:ResponseCode>06</a:ResponseCode>
+            <a:TotalFailed>1</a:TotalFailed>
+            <a:TotalProcessed>0</a:TotalProcessed>
+            <a:TotalRecordReceived>0</a:TotalRecordReceived>
+            <a:Transactions>
+               <a:TransDetail>
+                  <a:Amount>2000</a:Amount>
+                  <a:Description>Transaction Reference already used||</a:Description>
+                  <a:PaymentStatus/>
+                  <a:ResponseCode>30</a:ResponseCode>
+                  <a:TransactionRef>CIB/TEST/BD/SSSS</a:TransactionRef>
+                  <a:VendorAccount/>
+                  <a:VendorBankCode/>
+               </a:TransDetail>
+            </a:Transactions>
+
+         </SendRequestResult>
+      </SendRequestResponse>
+   </s:Body>
+</soap:Envelope>';
+//var_dump($result);die();
+list($trash,$result)= explode('<s:Body>',$result);
+list($result,$trash)=explode('</s:Body>',$result);
+unset($trash);
+
+$result=str_replace('xmlns="http://com.zenithbank.com/custom/cibupload"','',$result);
+$result=str_replace('xmlns:a="http://schemas.datacontract.org/2004/07/CIBUploadService.Models" xmlns:i="http://www.w3.org/2001/XMLSchema-instance"','',$result);
+$result=str_replace('a:','',$result);
+
+
+$simple_result=@simplexml_load_string($result);
+$json_result=json_encode($simple_result);
+$newArr = [];
+    foreach(json_decode($json_result, true) as $data => $val)
+    {
+       foreach($val as $key2 => $val2)
+       {
+           $newArr[] = $val2;
+       }
+    }
+
+$transStatus =  $newArr[0];  //Failed or Sucess
+$responseCode = $newArr[1]; //response code
+$transAmount= $newArr[5]['TransDetail']['Amount'];
+$transResponseDesc = $newArr[5]['TransDetail']['Description'];
+$transResponseDesc = $newArr[5]['TransDetail']['TransactionRef'];
+var_dump($newArr);
+
+
+
+
+
+?>
